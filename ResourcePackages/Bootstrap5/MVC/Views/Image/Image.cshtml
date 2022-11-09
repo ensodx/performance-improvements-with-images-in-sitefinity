@@ -1,0 +1,55 @@
+@using Telerik.Sitefinity.Services;
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
+@using Telerik.Sitefinity.Frontend.Media.Mvc.Helpers
+@model Telerik.Sitefinity.Frontend.Media.Mvc.Models.Image.ImageViewModel
+
+@helper ImageTag()
+{
+    var thumbnails = Html.GetImageThumbnailsSortedByWidthDesc(Model);
+    var img = Model.Item.DataItem as Telerik.Sitefinity.Libraries.Model.Image;
+    string[] responsivesizes = { "xs", "sm", "md", "lg", "xl", "xxl" };
+    var thumbnailDataSrcset = string.Empty;
+    var thumbnailSourceSet = "data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+
+
+    if (thumbnails.Count > 0)
+    {
+        List<string> thumbnailsDataSrcSetList = new List<string>();
+
+        foreach (var thumbnail in thumbnails)
+        {
+            var blobThumb = thumbnail as Telerik.Sitefinity.BlobStorage.IBlobContent;
+            var ThumbName = thumbnail.Name;
+            if (blobThumb != null && (thumbnail.Width != img.Width && thumbnail.Height != img.Height) && (responsivesizes.Contains(ThumbName)))
+            {
+                thumbnailsDataSrcSetList.Add(blobThumb.Url + " " + thumbnail.Width + "w");
+            }
+        }
+        thumbnailDataSrcset = string.Join(", ", thumbnailsDataSrcSetList);
+    }
+
+    if (SystemManager.IsDesignMode)
+    {
+        thumbnailSourceSet = Model.SelectedSizeUrl;
+    }
+
+    <img loading="lazy"
+         title="@Html.HtmlSanitize(Model.Title)"
+         alt="@Html.HtmlSanitize(Model.AlternativeText)"
+         class="responsively-lazy mw-100 h-auto @Model.CssClass"
+         src="@Model.SelectedSizeUrl"
+         srcset="@thumbnailSourceSet"
+         data-srcset="@thumbnailDataSrcset" />
+
+}
+
+@if (string.IsNullOrEmpty(Model.LinkedContentUrl))
+{
+    @ImageTag()
+}
+else
+{
+    <a href="@Model.LinkedContentUrl" title="Open image in original size">
+        @ImageTag()
+    </a>
+} 
