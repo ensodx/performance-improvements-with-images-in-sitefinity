@@ -1,5 +1,5 @@
 # Performance improvements with images in Sitefinity
-How to adapt the rendering of images to achieve 80-90% page size and performance reduction with Sitefinity. For more information, watch the [video here](https://www.instagram.com/reel/CkvJpZ5A5bO/?igshid=YmMyMTA2M2Y=).
+How to adapt the rendering of images to achieve 80-90% page size and performance reduction with Sitefinity. For more information, watch the [video here](https://www.instagram.com/reel/CkvMdDxgLza/?utm_source=github).
 
 
 - [Summary](#Summary)
